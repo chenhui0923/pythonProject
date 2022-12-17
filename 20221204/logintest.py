@@ -98,7 +98,7 @@ if __name__ =='__main__':
 #     unittest.main(defaultTest='suite')
 # 5.文件下以.py结尾所有用例：
 #
-# #print(os.getcwd())获取路径
+# #print(os.getcwd())获取当前文件夹路径
 #
 # if __name__ =='__main__':
 #     suite = unittest.TestSuite()
