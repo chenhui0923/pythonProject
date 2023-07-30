@@ -1,6 +1,19 @@
 import pymysql;
+mysql = {
+    "host": "192.168.8.249",
+    "user": "pingtt",
+    "password": "qwer1234~!",
+    "database": "large"
+}
+# mysql = {
+#     "host": "192.168.2.33",
+#     "user": "pingtt",
+#     "password": "toprich",
+#     "database": "pro_large"
+# }
 
-db = pymysql.connect(host='192.168.8.249', user='pingtt', port=3306, password='qwer1234~!')
+db = pymysql.connect(host=mysql["host"], user=mysql["user"], port=3306, password=mysql["password"])
+
 
 cursor = db.cursor()
 sql = "SELECT * FROM `exhibition`.`proofing_notice`"
