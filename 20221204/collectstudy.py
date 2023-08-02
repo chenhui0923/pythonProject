@@ -2,6 +2,7 @@ my_students = ["kevin", "lihong"]
 coure_rank = {"math": "kevin", "logic": "lihong", "english": "lishi"}
 my_students_rank = {}
 args = [2, 4, 5]
+onezone= 20
 
 
 def class_log():  # 无形参数
@@ -49,6 +50,21 @@ def square(l):
         list.append(x*x)
     return list
 
+def xgglobal():
+    global onezone #套娃， 使用父级的 参数 ，也可以通过方法赋值调用
+    print(onezone)
+    onezone = 123
+    print(onezone)
+    num  = 10
+    def xgnonlocal():
+        nonlocal num #套娃， 使用父级的 参数
+        print(num)
+        num = 456
+        print(num)
+    return xgnonlocal()
+
+
+
 a=lambda l:[x*x for x in l] #匿名函数简化写法
 
 if __name__ == '__main__':
@@ -61,12 +77,14 @@ if __name__ == '__main__':
     #         print('{person}--{coure}'.format(person=p, coure=my_students_rank[p]))
     #     p_len -= 1
     # class_log()
-    total = sum_number(1, 2)
-    print(total)
-    min = min_number(1, 2)
-    print(min)
-    count_student(math='kecin', login='emli')
-    print(write('appent'))
-    print(write_determine(['appent', 'banner', 'orange']))
-    print(square(args))
-    print(a(args))
+    # total = sum_number(1, 2)
+    # print(total)
+    # min = min_number(1, 2)
+    # print(min)
+    # count_student(math='kecin', login='emli')
+    # print(write('appent'))
+    # print(write_determine(['appent', 'banner', 'orange']))
+    # print(square(args))
+    # print(a(args))
+    print(xgglobal(),onezone,)
+

@@ -1,5 +1,9 @@
-from collectstudy import*
-# list1 = ['sty', 'school']
+from collectstudy import *
+
+str1 = "this is string example....wow!!!";
+list1 = ['sty', 'school']
+
+
 # numbers1 = len(list1)  # 计算列表元素个数
 # numbers2 = list1[0]  # 返回第0个元素
 # list1.append('red')  # 在尾部添加一个元素
@@ -24,6 +28,22 @@ from collectstudy import*
 # del dict1["englist"]  # 删除
 # del dict1  # 删除
 # print(dict1)
-if __name__ == '__main__':
-   print(sum_number(2,3))
 
+def cap(rem):
+    test = []
+    for item in rem:
+        # test.append(item)
+        test.append(item.capitalize())  # 首字符大写的方法
+        test.append(item.center(10, '-'))  # 填充字符的方法
+    return test
+
+
+def findtes(rem, listtxt):
+    num = listtxt.find(rem) # 检测字符串中是否包含子字符串 str ，不包括 返回-1
+    return num
+
+
+if __name__ == '__main__':
+    # print(sum_number(2, 3))
+    print(cap(list1))
+    print(findtes("u", str1))
