@@ -1,33 +1,61 @@
 import pymysql;
+
+
+#mysql看看这个https://www.jianshu.com/p/4e72faebd27f
+
+# mysql = {
+#     "host": "192.168.8.249",
+#     "user": "pingtt",
+#     "password": "qwer1234~!",
+#     "database": "large"
+# }
 mysql = {
-    "host": "192.168.8.249",
+    "host": "192.168.2.33",
     "user": "pingtt",
     "password": "qwer1234~!",
-    "database": "large"
+    "database": "pro_large"
 }
-# mysql = {
-#     "host": "192.168.2.33",
-#     "user": "pingtt",
-#     "password": "toprich",
-#     "database": "pro_large"
-# }
 
 db = pymysql.connect(host=mysql["host"], user=mysql["user"], port=3306, password=mysql["password"])
-
-
 cursor = db.cursor()
-sql = "SELECT * FROM `exhibition`.`proofing_notice`"
 
-try:
-    cursor.execute(sql)
-    results = cursor.fetchall()
-    for row in results:
-        id = row[0]
-        color_id = row[2]
-        print(id, color_id)
-except:
-    db.rollback()
+def testmysql():
+    sql = "SELECT * FROM `exhibition`.`proofing_notice`"
+
+    try:
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        for row in results:
+            id = row[0]
+            color_id = row[2]
+            print(id, color_id)
+    except:
+        db.rollback()
+
+
+def num_4():
+    sql = "SELECT * FROM `ding`.`ding_employee`  where mobile is not null and remark is null and  userid = 27402516071229377 "
+    sql1 = "UPDATE `ding`.`ding_employee` SET remark = %s WHERE `id` = %d"
+    try:
+        cursor.execute(sql)
+        results = cursor.fetchall()
+
+        for row in results:
+            id = row[0]
+            mobile = row[7]
+            remark1 = int(mobile[-4:])
+            test1 = (remark1,id)
+            print(test1)
+        cursor.executemany(sql1,test1)
+        db.commit()
+    except:
+        db.rollback()
+
 
 # 关闭数据库连接
-db.close();
 
+
+if __name__ == '__main__':
+    # testmysql()
+    num_4()
+    db.close();

@@ -50,6 +50,9 @@ def square(l):
         list.append(x*x)
     return list
 
+a=lambda l:[x*x for x in l] #匿名函数简化写法
+
+
 def xgglobal():
     global onezone #套娃， 使用父级的 参数 ，也可以通过方法赋值调用
     print(onezone)
@@ -65,7 +68,7 @@ def xgglobal():
 
 
 
-a=lambda l:[x*x for x in l] #匿名函数简化写法
+
 
 if __name__ == '__main__':
     #     for k, v in coure_rank.items():
