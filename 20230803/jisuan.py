@@ -1,4 +1,6 @@
 import calendar
+import time
+import datetime
 
 
 # 求和
@@ -35,8 +37,23 @@ def main():
             break
         fish += 1
 
+# 昨天日期
+def yesterday():
+    #datetime.timedelta 对于日期时间 进行加减操作，正数时为加，负数时为减
+    yesterday = datetime.date.today() + datetime.timedelta(-1)
+    return yesterday
+
+# n个数的平方相加
+def sumOfSeries():
+    n = int(input("输入数字："))
+    sumnum = 0
+    for i in range(1, n+1):
+        sumnum += i*i
+    return sumnum
 
 if __name__ == '__main__':
     # sum()
     # calendardate()
-    main()
+    # main()
+    # print(yesterday())
+   print(sumOfSeries())
