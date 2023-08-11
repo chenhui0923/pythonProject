@@ -1,5 +1,6 @@
 from collectstudy import *
 
+
 str1 = "this is string example....wow!!!";
 list1 = ['sty', 'school']
 
