@@ -4,7 +4,7 @@ import  tkinter as tk
 # https://zhuanlan.zhihu.com/p/573356149?utm_id=0  看着慢慢写
 
 
-side = 30
+side  = 30
 height  = 20*side
 width   = 20*side
 margin =4
