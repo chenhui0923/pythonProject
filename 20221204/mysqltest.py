@@ -1,7 +1,6 @@
 import pymysql;
 
-
-#mysql看看这个https://www.jianshu.com/p/4e72faebd27f
+# mysql看看这个https://www.jianshu.com/p/4e72faebd27f
 
 # mysql = {
 #     "host": "192.168.8.34",
@@ -10,23 +9,24 @@ import pymysql;
 #     "database": "large"
 # }
 # 正式
-# mysql = {
-#     "host": "192.168.2.33",
-#     "user": "pingtt",
-#     "password": "qwer1234~!",
-#     "database": "pro_large"
-# }
-# 测试
 mysql = {
-    "host": "192.168.8.249",
-    "user": "root",
-    "password": "root",
-    "database": "exhibition"
+    "host": "192.168.2.33",
+    "user": "pingtt",
+    "password": "qwer1234~!",
+    "database": "pro_large"
 }
+# # 测试
+# mysql = {
+#     "host": "192.168.8.249",
+#     "user": "root",
+#     "password": "root",
+#     "database": "exhibition"
+# }
 
 
 db = pymysql.connect(host=mysql["host"], user=mysql["user"], port=3306, password=mysql["password"])
 cursor = db.cursor()
+
 
 def Explmysql():
     sql = "SELECT a.id,g.name,c.name,d.qa_time FROM exhibition.proofing_notice as a" \
@@ -60,12 +60,10 @@ def Explmysql():
     print(avgqa)
 
 
-
 # 写ding表的 remark 字段
 def Dingnum_4():
-    sql = "SELECT * FROM `ding`.`ding_employee`  where mobile is not null and remark is null "
+    sql = "SELECT * FROM `ding`.`ding_employee`  where mobile is not null and remark is null and status = 1"
     sql1 = "UPDATE `ding`.`ding_employee` SET remark = %s WHERE `id` = %s"
-
 
     try:
         cursor.execute(sql)
@@ -75,20 +73,37 @@ def Dingnum_4():
             id = row[0]
             mobile = row[7]
             remark1 = str(mobile[-4:])
-            test1 = (remark1,id)
+            test1 = (remark1, id)
             print(test1)
 
-            cursor.execute(sql1,test1)
+            cursor.execute(sql1, test1)
         db.commit()
     except:
         db.rollback()
 
 
+def weihu():
+    sql = "SELECT * FROM `kylin`.`proofing_notice_cad` a LEFT JOIN `kylin`.`proofing_notice` b ON a.notice_id = b.id WHERE a.deleted_at is null AND a.flag =4 AND b.quality_date is not null AND a.deleted_at  is null"
+    sql1 = "UPDATE `kylin`.`proofing_notice_cad` SET `is_quality` = 1, `is_quality_time` = %s WHERE `id` = %s"
+    try:
 
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        for row in results:
+            id = row[0]
+            noticeid = row[1]
+            qudate =row[56]
+            test1 = (qudate,id)
+            print(id)
+            cursor.execute(sql1, test1)
+        db.commit()
+    except Exception as e:
+        print(e)
+        db.rollback()
 
 if __name__ == '__main__':
-    Explmysql();
-    # Dingnum_4()
-
+    # Explmysql();
+    Dingnum_4();
+    # weihu();
     # 关闭数据库连接
     db.close();
