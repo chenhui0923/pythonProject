@@ -1,6 +1,9 @@
 import tkinter as tk
 from tkinter import GROOVE, X
 
+# 布局https://c.biancheng.net/tkinter/layout-manager-method.html
+# 其他https://blog.csdn.net/Mark_Coder/article/details/131211458?spm=1001.2101.3001.6650.4&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-4-131211458-blog-88817605.235%5Ev43%5Epc_blog_bottom_relevance_base5&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-4-131211458-blog-88817605.235%5Ev43%5Epc_blog_bottom_relevance_base5
+
 height=800
 width = 800
 
