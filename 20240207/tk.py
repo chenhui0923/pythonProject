@@ -1,5 +1,6 @@
+import time
 import tkinter as tk
-from tkinter import GROOVE, X, BOTTOM, HORIZONTAL, RIGHT, Y, LEFT, BOTH
+from tkinter import GROOVE, X, BOTTOM, HORIZONTAL, RIGHT, Y, END, BOTH, LEFT
 
 # 布局https://c.biancheng.net/tkinter/layout-manager-method.html
 
@@ -25,10 +26,18 @@ def windhewi():
     # print("高度：",scrheight,"宽度：",scrwidth,"面积：",area(scrheight,scrwidth))
     chuankou.geometry("%dx%d+%d+%d" % (width, height, (scrwidth-width)/2, (scrheight-height)/2))  # 居中
 
+
 def chengfakoujue():
-    for i in range(0,15):
-        for j in range(0,15):
-            tk.Button(chuankou,text="("+str(i)+","+str(j)+")",bg='#D1EEEE',width=10).grid(row=i,column=j) # row 代表第几行，column 代表第几列
+    for i in range(30):
+        mylist.insert(END, '第' + str(i + 1) + '次:')
+
+
+def gettime():
+
+
+    dstr.set(time.strftime("%H:%M:%S"))
+    chuankou.after(1000, gettime)
+
 
 
 # 创建一个窗口
@@ -41,11 +50,31 @@ chuankou.iconbitmap("蔬菜.ico")
 chuankou.title("TK的学习文件")
 # 窗口大小 这玩意一定是string类型的其他的类型不管用
 chuankou.geometry(str(width) + "x" + str(height))
+# 创建一个滚动的窗口控件,内涵pack 无法与grid共用
+sbarl = tk.Scrollbar(chuankou)
+sbarl.pack(side=RIGHT, fill=Y)
+sbar2 = tk.Scrollbar(chuankou, orient=HORIZONTAL)
+sbar2.pack(side=BOTTOM, fill=X)
+mylist = tk.Listbox(chuankou,xscrollcommand = sbar2.set,yscrollcommand = sbarl.set)
+
+# 生成动态字符串
+dstr = tk.StringVar()
+lb = tk.Label(chuankou, textvariable=dstr, fg='green', font=("微软雅黑", 15)).pack()
+
 #
 windhewi()
 # text_label()
 # first_button()
-chengfakoujue()
+
+gettime()
+
+
+
+# # 当窗口改变大小时会在X与Y方向填满窗口
+# mylist.pack(side=LEFT,fill = BOTH)
+# # 使用 command 关联控件的 yview、xview方法
+# sbarl.config(command =mylist.yview)
+# sbar2.config(command = mylist.xview)
 
 # 显示窗口
 chuankou.mainloop()
