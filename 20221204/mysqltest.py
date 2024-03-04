@@ -62,9 +62,12 @@ def Explmysql():
 
 # 写ding表的 remark 字段
 def Dingnum_4():
+    # 补公司的wifi
     sql = "SELECT * FROM `ding`.`ding_employee`  where mobile is not null and remark is null and status = 1"
     sql1 = "UPDATE `ding`.`ding_employee` SET remark = %s WHERE `id` = %s"
-
+    # 默认生产基地为1
+    sql2 = "SELECT * FROM `ding`.`ding_employee`  where place_from is null and status = 1"
+    sql3 = "UPDATE `ding`.`ding_employee` SET place_from = %s WHERE `id` = %s"
     try:
         cursor.execute(sql)
         results = cursor.fetchall()
@@ -77,6 +80,18 @@ def Dingnum_4():
             print(test1)
 
             cursor.execute(sql1, test1)
+        db.commit()
+    except:
+        db.rollback()
+
+    try:
+        cursor.execute(sql2)
+        results = cursor.fetchall()
+        for row in results:
+            id = row[0]
+            place_from = 1
+            test2 = (place_from, id)
+            cursor.execute(sql3, test2)
         db.commit()
     except:
         db.rollback()
