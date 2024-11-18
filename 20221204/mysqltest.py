@@ -1,4 +1,5 @@
 import pymysql;
+import pandas as pd
 
 # mysql看看这个https://www.jianshu.com/p/4e72faebd27f
 
@@ -15,7 +16,7 @@ mysql = {
     "password": "qwer1234~!",
     "database": "pro_large"
 }
-# # 测试
+# 测试
 # mysql = {
 #     "host": "192.168.8.249",
 #     "user": "root",
@@ -96,29 +97,52 @@ def Dingnum_4():
     except:
         db.rollback()
 
-
+# 主要删除一些软删的数据
 def weihu():
-    sql = "SELECT * FROM `kylin`.`proofing_notice_cad` a LEFT JOIN `kylin`.`proofing_notice` b ON a.notice_id = b.id WHERE a.deleted_at is null AND a.flag =4 AND b.quality_date is not null AND a.deleted_at  is null"
-    sql1 = "UPDATE `kylin`.`proofing_notice_cad` SET `is_quality` = 1, `is_quality_time` = %s WHERE `id` = %s"
+    sql = "SELECT id FROM `kylin`.`proofing_notice_plan_less` a  WHERE a.deleted_at is not null "
+    sql1 = "DELETE FROM `kylin`.`proofing_notice_plan_less`  WHERE `id` = %s"
     try:
 
         cursor.execute(sql)
         results = cursor.fetchall()
         for row in results:
             id = row[0]
-            noticeid = row[1]
-            qudate =row[56]
-            test1 = (qudate,id)
             print(id)
-            cursor.execute(sql1, test1)
+            cursor.execute(sql1, id)
         db.commit()
     except Exception as e:
         print(e)
         db.rollback()
 
+
+# 批量处理excel中报废设备
+def zicanbaofei():
+    df = pd.read_excel('111.xlsx')
+    column_data = df['编码'].values.tolist()
+    # print(column_data)
+
+    sql = "SELECT a.code FROM `kylin`.`equipment` as a"
+    sql1 = "UPDATE `kylin`.`equipment` SET  `status` = 5 WHERE `code` = %s"
+    try:
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        for row in results:
+            code = row[0]
+
+            if code in column_data:
+                print(code);
+                cursor.execute(sql1, code)
+        db.commit()
+    except Exception as e:
+        db.rollback()
+
+
+
 if __name__ == '__main__':
     # Explmysql();
     Dingnum_4();
-    # weihu();
+    weihu();
+    # zicanbaofei();
+
     # 关闭数据库连接
     db.close();
