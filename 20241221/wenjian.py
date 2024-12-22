@@ -73,20 +73,79 @@ def read(qianyi_path):
             # if company:
             #     print(re_block(company[len(company)-1]))
             # print('--------------------------------------------------------')
-            # name1.append(filename)
+            name1.append(filename)
             name2.append(item)
             name3.append(item3)
+            # 处理下面表格的数据
+            table = first_page.extract_tables()[0]
+            for t in table[1]:
+                if not t:
+                    continue
+                t_ = str(t).replace(" ", "")  # 去掉空格
+
+                ts = t_.split("\n")
+                if "车牌号" in t_:
+                    if len(ts) > 1 :
+                        name4.append(ts[1])
+                    else:
+                        name4.append("")
+                if "通行日期起" in t_:
+                    if len(ts) > 1 :
+                        name5.append(ts[1])
+                    else:
+                        name5.append("")
+                # if "单位" in t_:
+                #     if len(ts) > 1:
+                #         all_fields["单位"].append(ts[1])
+                #     else:
+                #         all_fields["单位"].append("")
+                # if "数量" in t_:
+                #     if len(ts) > 1:
+                #         all_fields["数量"].append(ts[1])
+                #     else:
+                #         all_fields["数量"].append("")
+                # if "单价" in t_:
+                #     if len(ts) > 1:
+                #         all_fields["单价"].append(ts[1])
+                #     else:
+                #         all_fields["单价"].append("")
+                # if "税率" in t_:
+                #     if len(ts) > 1:
+                #         all_fields["税率"].append(ts[1])
+                #     else:
+                #         all_fields["税率"].append("")
+                # if "金额" in t_:
+                #     if len(ts) > 1:
+                #         all_fields["金额"].append(ts[1])
+                #     else:
+                #         all_fields["金额"].append("")
+                # if "税额" in t_:
+                #     if len(ts) > 1:
+                #         all_fields["税额"].append(ts[1])
+                #     else:
+                #         all_fields["税额"].append("")
+            # print(all_fields);
+
+
 
 
 if __name__ == '__main__':
     file_path1 = []  #用来看所提取的文件名
     file2 = []  # 用于存储excel 文件中的发票号
-    # name1 = []
-    name2 = []
+    name1 = []
+    name2 = [] #发票号
     name3 = []
-    file_path = r"C:\Users\Administrator\Desktop\2024ETC变更后"
-    qianyi_path = r'C:\Users\Administrator\Desktop\迁移1'
-    # file_path = input("输入所需提取的文件夹路径：")
-    # qianyi_path = input("输入迁移的目标文件夹：")
+    name4 = [] # 车牌号
+    name5 = [] # 通行日期起
+    # file_path = r"C:\Users\Administrator\Desktop\2024ETC变更后"
+    # qianyi_path = r'C:\Users\Administrator\Desktop\迁移1'
+    file_path = input("输入所需提取的文件夹路径：")
+    qianyi_path = input("输入迁移的目标文件夹：")
     search_dir(file_path);
     read(qianyi_path);
+    for item1, item2, item3 ,item4, item5 in zip(name1,name2,name3,name4,name5):
+
+        filname = os.path.dirname(item1)+ "\\"+item4+"_" +item5+"_" +item2 +'.pdf'
+        print(filname)
+        os.rename(item1,filname)
+    # 车牌号_通行日期_发票号;
