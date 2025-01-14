@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>抽奖活动</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f7f7f7;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            font-size: 1.2em;
+            color: #333;
+            text-align: center;
+        }
+        .result-item {
+            margin-bottom: 10px;
+        }
+        .rolling-number {
+            font-size: 2em;
+            color: #ff6600;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>抽奖活动</h1>
+        <button onclick="startLottery()">开始抽奖</button>
+        <div id="result">
+            <div class="rolling-number" id="luckyNumberRolling">幸运奖数字滚动中...</div>
+            <div class="rolling-number" id="encouragementPrizeRolling">鼓励奖桌号滚动中...</div>
+        </div>
+    </div>
+
+    <script>
+        let luckyNumberInterval;
+        let encouragementPrizeInterval;
+
+        function startLottery() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <div class="rolling-number" id="luckyNumberRolling">幸运奖数字滚动中...</div>
+                <div class="rolling-number" id="encouragementPrizeRolling">鼓励奖桌号滚动中...</div>
+            `;
+
+            // 开始幸运奖数字滚动
+            luckyNumberInterval = setInterval(() => {
+                document.getElementById('luckyNumberRolling').textContent = `幸运奖数字：${Math.floor(Math.random() * 12) + 1}`;
+            }, 100);
+
+            // 5秒后停止幸运奖数字滚动并显示结果
+            setTimeout(() => {
+                clearInterval(luckyNumberInterval);
+                const luckyNumber = Math.floor(Math.random() * 12) + 1;
+                document.getElementById('luckyNumberRolling').textContent = `幸运奖数字：${luckyNumber}`;
+
+                // 开始鼓励奖桌号滚动
+                encouragementPrizeInterval = setInterval(() => {
+                    const randomTables = Array.from({ length: 5 }, () => Math.floor(Math.random() * 40) + 1);
+                    document.getElementById('encouragementPrizeRolling').textContent = `鼓励奖桌号：${randomTables.join(', ')}`;
+                }, 100);
+
+                // 5秒后停止鼓励奖桌号滚动并显示结果
+                setTimeout(() => {
+                    clearInterval(encouragementPrizeInterval);
+                    const tables = Array.from({ length: 40 }, (_, i) => i + 1);
+                    const encouragementPrizeTables = [];
+                    while (encouragementPrizeTables.length < 5) {
+                        const randomIndex = Math.floor(Math.random() * tables.length);
+                        encouragementPrizeTables.push(tables[randomIndex]);
+                        tables.splice(randomIndex, 1);
+                    }
+                    document.getElementById('encouragementPrizeRolling').textContent = `鼓励奖桌号：${encouragementPrizeTables.join(', ')}`;
+                }, 5000);
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

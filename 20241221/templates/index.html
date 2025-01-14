@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>抽奖系统</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            height: 100%;
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: #fff;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin: 10px 0;
+            font-size: 18px;
+            color: #333;
+        }
+        .result span {
+            font-weight: bold;
+            color: #007BFF;
+        }
+        .rolling {
+            animation: rolling 5s linear infinite;
+        }
+        @keyframes rolling {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+            <h1>抽奖系统</h1>
+            <button id="lucky-btn" onclick="drawLucky()">抽取幸运奖</button>
+            <div class="result" id="lucky-result"></div>
+
+            <button id="perfect-btn" class="hidden" onclick="drawPerfect()">抽取圆满奖</button>
+            <div class="result" id="perfect-result"></div>
+
+            <button id="perfect-number-btn" class="hidden" onclick="drawPerfectNumber()">抽取吉祥奖</button>
+            <div class="result" id="perfect-number-result"></div>
+
+            <button id="healthy-btn" class="hidden" onclick="drawHealthy()">抽取安康奖</button>
+            <div class="result" id="healthy-result"></div>
+
+            <button id="happy-btn" class="hidden" onclick="drawHappy()">抽取幸福奖</button>
+            <div class="result" id="happy-result"></div>
+
+            <button id="joy-btn" class="hidden" onclick="drawJoy()">抽取喜悦奖</button>
+            <div class="result" id="joy-result"></div>
+
+            <button id="first-btn" class="hidden" onclick="drawFirst()">抽取一等奖</button>
+            <div class="result" id="first-result"></div>
+
+            <button id="special-btn" class="hidden" onclick="drawSpecial()">抽取特等奖</button>
+            <div class="result" id="special-result"></div>
+
+    </div>
+
+    <script>
+        function showButton(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function hideButton(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+        //幸运奖
+        function drawLucky() {
+            let luckyNumber = 0;
+            const interval = setInterval(() => {
+                luckyNumber = Math.floor(Math.random() * 12) + 1;
+                document.getElementById('lucky-result').innerText = `幸运奖序号: ${luckyNumber}`;
+            }, 100);
+
+            setTimeout(() => {
+                clearInterval(interval);
+                fetch('/draw_lucky', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('lucky-result').innerHTML = `幸运奖序号: <span>${data.lucky_number}</span>`;
+                        hideButton('lucky-btn');
+                        showButton('perfect-btn');
+                    });
+            }, 5000);
+        }
+        //圆满奖
+        function drawPerfect() {
+            let perfectTables = [];
+            const interval = setInterval(() => {
+                perfectTables = Array.from({ length: 5 }, () => Math.floor(Math.random() * 40) + 1);
+                document.getElementById('perfect-result').innerText = `圆满奖桌号: ${perfectTables.join(', ')}`;
+            }, 100);
+
+            setTimeout(() => {
+                clearInterval(interval);
+                fetch('/draw_perfect', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('perfect-result').innerHTML = `圆满奖桌号: <span>${data.perfect_tables.join(', ')}</span>`;
+                        hideButton('perfect-btn');
+                        showButton('perfect-number-btn');
+                    });
+            }, 5000);
+        }
+        //吉祥奖
+        function drawPerfectNumber() {
+            let perfectNumber = 0;
+            const interval = setInterval(() => {
+                perfectNumber = Math.floor(Math.random() * 12) + 1;
+                document.getElementById('perfect-number-result').innerText = `吉祥奖序号: ${perfectNumber}`;
+            }, 100);
+
+            setTimeout(() => {
+                clearInterval(interval);
+                fetch('/draw_perfect_number', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('perfect-number-result').innerHTML = `吉祥奖序号: <span>${data.perfect_number}</span>`;
+                        hideButton('perfect-number-btn');
+                        showButton('healthy-btn');
+                    });
+            }, 5000);
+        }
+        //安康奖
+        function drawHealthy() {
+            let healthyWinners = [];
+            const interval = setInterval(() => {
+                healthyWinners = Array.from({ length: 20 }, () => `桌号-${Math.floor(Math.random() * 40) + 1}-${Math.floor(Math.random() * 12) + 1}`);
+                document.getElementById('healthy-result').innerText = `安康奖: ${healthyWinners.join(', ')}`;
+            }, 100);
+
+            setTimeout(() => {
+                clearInterval(interval);
+                fetch('/draw_healthy', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('healthy-result').innerHTML = `安康奖: <span>${data.healthy_winners.map(w => `${w.桌号}-${w.序号}-${w.姓名}`).join(', ')}</span>`;
+                        hideButton('healthy-btn');
+                        showButton('happy-btn');
+                    });
+            }, 5000);
+        }
+        //幸福奖
+        function drawHappy() {
+            let happyWinners = [];
+            const interval = setInterval(() => {
+                happyWinners = Array.from({ length: 10 }, () => `桌号-${Math.floor(Math.random() * 40) + 1}-${Math.floor(Math.random() * 12) + 1}`);
+                document.getElementById('happy-result').innerText = `幸福奖: ${happyWinners.join(', ')}`;
+            }, 100);
+
+            setTimeout(() => {
+                clearInterval(interval);
+                fetch('/draw_happy', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('happy-result').innerHTML = `幸福奖: <span>${data.happy_winners.map(w => `${w.桌号}-${w.序号}-${w.姓名}`).join(', ')}</span>`;
+                        hideButton('happy-btn');
+                        showButton('joy-btn');
+                    });
+            }, 5000);
+        }
+        //喜悦奖
+        function drawJoy() {
+            let joyWinners = [];
+            const interval = setInterval(() => {
+                joyWinners = Array.from({ length: 5 }, () => `桌号-${Math.floor(Math.random() * 40) + 1}-${Math.floor(Math.random() * 12) + 1}`);
+                document.getElementById('joy-result').innerText = `喜悦奖: ${joyWinners.join(', ')}`;
+            }, 100);
+            setTimeout(() => {
+                clearInterval(interval);
+                fetch('/draw_joy', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('joy-result').innerHTML = `喜悦奖: <span>${data.joy_winners.map(w => `${w.桌号}-${w.序号}-${w.姓名}`).join(', ')}</span>`;
+                        hideButton('joy-btn');
+                        showButton('first-btn');
+                });
+            },5000);
+        }
+        //一等奖
+        function drawFirst() {
+            let firstWinners = [];
+            const interval = setInterval(() => {
+                firstWinners = Array.from({ length: 2 }, () => `桌号-${Math.floor(Math.random() * 40) + 1}-${Math.floor(Math.random() * 12) + 1}`);
+                document.getElementById('first-result').innerText = `一等奖: ${firstWinners.join(', ')}`;
+            }, 100);
+            setTimeout(() => {
+                clearInterval(interval);
+                fetch('/draw_first', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('first-result').innerHTML = `一等奖: <span>${data.first_winners.map(w => `${w.桌号}-${w.序号}-${w.姓名}`).join(', ')}</span>`;
+                        hideButton('first-btn');
+                        showButton('special-btn');
+                });
+            },5000);
+        }
+        //特等奖
+        function drawSpecial() {
+            let tsWinners = [];
+            const interval = setInterval(() => {
+                tsWinners = Array.from({ length: 1 }, () => `桌号-${Math.floor(Math.random() * 40) + 1}-${Math.floor(Math.random() * 12) + 1}`);
+                document.getElementById('special-result').innerText = `特等奖: ${tsWinners.join(', ')}`;
+            }, 100);
+            setTimeout(() => {
+                clearInterval(interval);
+            fetch('/draw_special', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('special-result').innerHTML = `特等奖: <span>${data.special_winner.桌号}-${data.special_winner.序号}-${data.special_winner.姓名}</span>`;
+                    hideButton('special-btn');
+                    showButton(' ');
+                });
+            },5000);
+        }
+    </script>
+</body>
+</html>
