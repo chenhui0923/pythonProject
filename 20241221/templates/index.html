@@ -195,7 +195,8 @@
                 fetch('/hongbao1', { method: 'POST' })
                     .then(response => response.json())
                     .then(data => {
-                        document.getElementById('hongbao1-result').innerHTML += `圆满奖红包: <span>${data.hongbao1[hongbao1Round].map(w => `${w.桌号}-${w.序号}-${w.姓名}`).join(', ')}</span><br>`;
+                        document.getElementById('hongbao1-result').innerHTML +=
+                            `第${hongbao1Round + 1}轮圆满奖红包: <span>${data.hongbao1.map(w => `${w.桌号}-${w.序号}-${w.姓名}`).join(', ')}</span><br>`;
                         hongbao1Round++;
                         if (hongbao1Round === 4) {
                             // 隐藏圆满奖按钮，显示吉祥奖按钮

@@ -57,12 +57,15 @@ def draw_perfect_number():
     # 返回抽取的5个数
     return jsonify({'perfect_number': perfect_number})
 
+# 健康奖：每次抽取5个，共4轮
 @app.route('/draw_healthy', methods=['POST'])
 def draw_healthy():
     global data
-    healthy_winners = random.sample(data, 20)
+    if len(data) < 5:
+        return jsonify({"error": "数据不足，无法继续抽取"}), 400
+    healthy_winners = random.sample(data, 5)
     data = [item for item in data if item not in healthy_winners]
-    return jsonify({'healthy_winners': [healthy_winners[i:i+5] for i in range(0, 20, 5)]})
+    return jsonify({'healthy_winners': healthy_winners})
 
 @app.route('/draw_happy', methods=['POST'])
 def draw_happy():
@@ -97,9 +100,11 @@ def draw_special():
 @app.route('/hongbao1', methods=['POST'])
 def hongbao1():
     data = load_data()
-    hongbao1 = random.sample(data, 20)
-    data = [item for item in data if item not in hongbao1]
-    return jsonify({'hongbao1': [hongbao1[i:i+5] for i in range(0, 20, 5)]})
+    if len(data) < 5:
+        return jsonify({"error": "数据不足，无法继续抽取"}), 400
+    hongbao_winners = random.sample(data, 5)
+    data = [item for item in data if item not in hongbao_winners]
+    return jsonify({'hongbao1': hongbao_winners})
 
 # 25抽5
 @app.route('/hongbao2', methods=['POST'])
