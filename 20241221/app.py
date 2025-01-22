@@ -26,9 +26,14 @@ def draw_lucky():
 def draw_perfect():
     global data
     unique_tables = set(item['桌号'] for item in data)
+    if len(unique_tables) < 10:
+        return jsonify({'error': '剩余桌号不足，无法抽取10个桌号'})
     perfect_tables = random.sample(list(unique_tables), 10)
     # 分5次返回结果，每次2个桌号
-    return jsonify({'perfect_tables': [perfect_tables[i:i+2] for i in range(0, 10, 2)]})
+    result = [perfect_tables[i:i+2] for i in range(0, 10, 2)]
+    # 从数据集中移除已经抽取的桌号
+    data = [item for item in data if item['桌号'] not in perfect_tables]
+    return jsonify({'perfect_tables': result})
 
 @app.route('/draw_perfect_number', methods=['POST'])
 def draw_perfect_number():
