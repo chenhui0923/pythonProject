@@ -35,11 +35,11 @@
             font-family: 'Arial', sans-serif;
         }
         button {
-            height: 140px; /* 使容器的高度为视口高度 */
-            weight:150px;
+            height: 160px; /* 使容器的高度为视口高度 */
+            weight:170px;
             background-color: #2164b0; /* 按钮背景色 */
             border: none;
-            color: #d3d2d2; /* 文本颜色 */
+            color: #aca9a9; /* 文本颜色 */
             padding: 15px 32px; /* 内边距 */
             text-align: center; /* 文本居中 */
             text-decoration: none;
@@ -62,7 +62,7 @@
         }
         .result span {
             font-weight: bold;
-            color: #ffffff;
+            color: #e7e6e6;
         }
         .hidden {
             display: none;
@@ -81,29 +81,57 @@
         <button id="perfect-btn" class="hidden" onclick="drawPerfect()">抽取圆满奖</button>
         <div class="result" id="perfect-result"></div>
 
+        <!--        抽红包1-->
+        <button id="hongbao1-btn" class="hidden" onclick="drawhongbao1()">抽取圆满奖红包</button>
+        <div class="result" id="hongbao1-result"></div>
+
         <!-- 吉祥奖 -->
         <button id="perfect-number-btn" class="hidden" onclick="drawPerfectNumber()">抽取吉祥奖</button>
         <div class="result" id="perfect-number-result"></div>
+
+        <!--  抽红包2-->
+        <button id="hongbao2" class="hidden" onclick="drawhongbao2()">抽取吉祥奖红包</button>
+        <div class="result" id="hongbao2-result"></div>
 
         <!-- 安康奖 -->
         <button id="healthy-btn" class="hidden" onclick="drawHealthy()">抽取安康奖</button>
         <div class="result" id="healthy-result"></div>
 
+        <!--  抽红包3-->
+        <button id="hongbao3" class="hidden" onclick="drawhongbao3()">抽取安康奖红包</button>
+        <div class="result" id="hongbao3-result"></div>
+
         <!-- 幸福奖 -->
         <button id="happy-btn" class="hidden" onclick="drawHappy()">抽取幸福奖</button>
         <div class="result" id="happy-result"></div>
+
+        <!--  抽红包4-->
+        <button id="hongbao4" class="hidden" onclick="drawhongbao4()">抽取幸福奖红包</button>
+        <div class="result" id="hongbao4-result"></div>
 
         <!-- 喜悦奖 -->
         <button id="joy-btn" class="hidden" onclick="drawJoy()">抽取喜悦奖</button>
         <div class="result" id="joy-result"></div>
 
+        <!--  抽红包5-->
+        <button id="hongbao5" class="hidden" onclick="drawhongbao5()">抽取喜悦奖红包</button>
+        <div class="result" id="hongbao5-result"></div>
+
         <!-- 一等奖 -->
         <button id="first-btn" class="hidden" onclick="drawFirst()">抽取一等奖</button>
         <div class="result" id="first-result"></div>
 
+        <!--  抽红包6-->
+        <button id="hongbao6" class="hidden" onclick="drawhongbao6()">抽取一等奖红包</button>
+        <div class="result" id="hongbao6-result"></div>
+
         <!-- 特等奖 -->
         <button id="special-btn" class="hidden" onclick="drawSpecial()">抽取特等奖</button>
         <div class="result" id="special-result"></div>
+
+        <!--  抽红包7-->
+        <button id="hongbao7" class="hidden" onclick="drawhongbao7()">抽取特等奖红包</button>
+        <div class="result" id="hongbao7-result"></div>
     </div>
 
     <script>
@@ -139,39 +167,76 @@
         let perfectRound = 0; // 用于记录圆满奖的抽取轮次
 
         function drawPerfect() {
-             document.getElementById('lucky-result').innerText = '';
+            document.getElementById('lucky-result').innerText = '';
             if (perfectRound < 5) {
                 fetch('/draw_perfect', { method: 'POST' })
                     .then(response => response.json())
                     .then(data => {
-                        document.getElementById('perfect-result').innerHTML += `<br>圆满奖桌号: <span>${data.perfect_tables[perfectRound].join(', ')}</span>`;
+                        if (data.error) {
+                            document.getElementById('perfect-result').innerHTML += `<br>错误: ${data.error}`;
+                            return;
+                        }
+                        document.getElementById('perfect-result').innerHTML += `<br>圆满奖桌号: <span>${data.perfect_tables.join(', ')}</span>`;
                         perfectRound++;
                         if (perfectRound === 5) {
                             // 隐藏圆满奖按钮，显示吉祥奖按钮
                             hideButton('perfect-btn');
-                            showButton('perfect-number-btn');
+                            showButton('hongbao1-btn');
                         }
                     });
             }
         }
 
-        // 吉祥奖
-        let perfectNumberRound = 0;
-
-        function drawPerfectNumber() {
+        //红包1
+        let hongbao1Round = 0;
+        function drawhongbao1(){
             document.getElementById('perfect-result').innerText = '';
-            if (perfectNumberRound < 7) {
-                fetch('/draw_perfect_number', { method: 'POST' })
+            if (hongbao1Round < 4) {
+                fetch('/hongbao1', { method: 'POST' })
                     .then(response => response.json())
                     .then(data => {
-                        document.getElementById('perfect-number-result').innerHTML += `吉祥奖: <span>${data.perfect_number[perfectNumberRound].map(w => `${w.桌号}-${w.序号}-${w.姓名}`).join(', ')}</span><br>`;
-                        perfectNumberRound++;
-                        if (perfectNumberRound === 7) {
-                            hideButton('perfect-number-btn');
-                            showButton('healthy-btn');
+                        document.getElementById('hongbao1-result').innerHTML += `圆满奖红包: <span>${data.hongbao1[hongbao1Round].map(w => `${w.桌号}-${w.序号}-${w.姓名}`).join(', ')}</span><br>`;
+                        hongbao1Round++;
+                        if (hongbao1Round === 4) {
+                            // 隐藏圆满奖按钮，显示吉祥奖按钮
+                            hideButton('hongbao1-btn');
+                            showButton('perfect-number-btn');
                         }
                     });
             }
+
+        }
+        let perfectNumberRound = 0;
+        // 吉祥奖
+       function drawPerfectNumber() {
+            // 检查是否已经抽取了7轮
+            if (perfectNumberRound >= 7) {
+                alert("已经抽取了7轮，无法继续抽取！");
+                return;
+            }
+
+            // 发起 POST 请求，抽取一组数据
+            fetch('/draw_perfect_number', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    }
+
+                    // 将抽取的5个数显示在页面上
+                    document.getElementById('perfect-number-result').innerHTML +=
+                        `第${perfectNumberRound + 1}轮吉祥奖: <span>${data.perfect_number.map(w => `${w.桌号}-${w.序号}-${w.姓名}`).join(', ')}</span><br>`;
+                    perfectNumberRound++; // 更新轮数
+                    // 如果抽取了7轮，隐藏按钮
+                    if (perfectNumberRound === 7) {
+                        hideButton('perfect-number-btn');
+                        showButton('healthy-btn');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         }
 
         // 安康奖
