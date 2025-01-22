@@ -215,7 +215,6 @@
                 alert("已经抽取了7轮，无法继续抽取！");
                 return;
             }
-
             // 发起 POST 请求，抽取一组数据
             fetch('/draw_perfect_number', { method: 'POST' })
                 .then(response => response.json())
@@ -224,7 +223,6 @@
                         alert(data.error);
                         return;
                     }
-
                     // 将抽取的5个数显示在页面上
                     document.getElementById('perfect-number-result').innerHTML +=
                         `第${perfectNumberRound + 1}轮吉祥奖: <span>${data.perfect_number.map(w => `${w.桌号}-${w.序号}-${w.姓名}`).join(', ')}</span><br>`;

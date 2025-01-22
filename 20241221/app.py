@@ -56,7 +56,6 @@ def draw_perfect_number():
 
     # 返回抽取的5个数
     return jsonify({'perfect_number': perfect_number})
-
 # 健康奖：每次抽取5个，共4轮
 @app.route('/draw_healthy', methods=['POST'])
 def draw_healthy():
@@ -67,30 +66,42 @@ def draw_healthy():
     data = [item for item in data if item not in healthy_winners]
     return jsonify({'healthy_winners': healthy_winners})
 
+# 幸福奖：每次抽取2个，共5轮
 @app.route('/draw_happy', methods=['POST'])
 def draw_happy():
     global data
-    happy_winners = random.sample(data, 10)
+    if len(data) < 2:
+        return jsonify({"error": "数据不足，无法继续抽取"}), 400
+    happy_winners = random.sample(data, 2)
     data = [item for item in data if item not in happy_winners]
-    return jsonify({'happy_winners': [happy_winners[i:i+2] for i in range(0, 10, 2)]})
+    return jsonify({'happy_winners': happy_winners})
 
+# 喜悦奖：每次抽取1个，共5轮
 @app.route('/draw_joy', methods=['POST'])
 def draw_joy():
     global data
-    joy_winners = random.sample(data, 5)
-    data = [item for item in data if item not in joy_winners]
-    return jsonify({'joy_winners': [joy_winners[i:i+1] for i in range(0, 5, 1)]})
+    if len(data) < 1:
+        return jsonify({"error": "数据不足，无法继续抽取"}), 400
+    joy_winner = random.choice(data)
+    data = [item for item in data if item != joy_winner]
+    return jsonify({'joy_winners': [joy_winner]})
 
+# 一等奖：每次抽取1个，共3轮
 @app.route('/draw_first', methods=['POST'])
 def draw_first():
     global data
-    first_winners = random.sample(data, 3)
-    data = [item for item in data if item not in first_winners]
-    return jsonify({'first_winners': [first_winners[i:i+1] for i in range(0, 3, 1)]})
+    if len(data) < 1:
+        return jsonify({"error": "数据不足，无法继续抽取"}), 400
+    first_winner = random.choice(data)
+    data = [item for item in data if item != first_winner]
+    return jsonify({'first_winners': [first_winner]})
 
+# 特等奖：抽取1个
 @app.route('/draw_special', methods=['POST'])
 def draw_special():
     global data
+    if len(data) < 1:
+        return jsonify({"error": "数据不足，无法继续抽取"}), 400
     special_winner = random.choice(data)
     data = [item for item in data if item != special_winner]
     return jsonify({'special_winner': special_winner})
@@ -105,56 +116,64 @@ def hongbao1():
     hongbao_winners = random.sample(data, 5)
     data = [item for item in data if item not in hongbao_winners]
     return jsonify({'hongbao1': hongbao_winners})
-
-# 25抽5
 @app.route('/hongbao2', methods=['POST'])
 def hongbao2():
     global data
-    hongbao2 = random.sample(data, 25)
-    data = [item for item in data if item not in hongbao2]
-    return jsonify({'hongbao2': [hongbao2[i:i+5] for i in range(0, 25, 5)]})
+    if len(data) < 5:
+        return jsonify({"error": "数据不足，无法继续抽取"}), 400
+    hongbao_winners = random.sample(data, 5)
+    data = [item for item in data if item not in hongbao_winners]
+    return jsonify({'hongbao2': hongbao_winners})
 
-
-# 10抽5
+# 红包3：每次抽取5个，共2轮
 @app.route('/hongbao3', methods=['POST'])
 def hongbao3():
     global data
-    hongbao3 = random.sample(data, 10)
-    data = [item for item in data if item not in hongbao3]
-    return jsonify({'hongbao3': [hongbao3[i:i+5] for i in range(0, 10, 5)]})
+    if len(data) < 5:
+        return jsonify({"error": "数据不足，无法继续抽取"}), 400
+    hongbao_winners = random.sample(data, 5)
+    data = [item for item in data if item not in hongbao_winners]
+    return jsonify({'hongbao3': hongbao_winners})
 
-# 12抽2
+# 红包4：每次抽取2个，共6轮
 @app.route('/hongbao4', methods=['POST'])
 def hongbao4():
     global data
-    hongbao4 = random.sample(data, 12)
-    data = [item for item in data if item not in hongbao4]
-    return jsonify({'hongbao4': [hongbao4[i:i+2] for i in range(0, 12, 2)]})
+    if len(data) < 2:
+        return jsonify({"error": "数据不足，无法继续抽取"}), 400
+    hongbao_winners = random.sample(data, 2)
+    data = [item for item in data if item not in hongbao_winners]
+    return jsonify({'hongbao4': hongbao_winners})
 
-# 10抽1
+# 红包5：每次抽取1个，共10轮
 @app.route('/hongbao5', methods=['POST'])
 def hongbao5():
     global data
-    hongbao5 = random.sample(data, 10)
-    data = [item for item in data if item not in hongbao5]
-    return jsonify({'hongbao5': [hongbao5[i:i+1] for i in range(0, 10, 1)]})
+    if len(data) < 1:
+        return jsonify({"error": "数据不足，无法继续抽取"}), 400
+    hongbao_winner = random.choice(data)
+    data = [item for item in data if item != hongbao_winner]
+    return jsonify({'hongbao5': [hongbao_winner]})
 
-# 12抽1
+# 红包6：每次抽取1个，共12轮
 @app.route('/hongbao6', methods=['POST'])
 def hongbao6():
     global data
-    hongbao6 = random.sample(data, 12)
-    data = [item for item in data if item not in hongbao6]
-    return jsonify({'hongbao6': [hongbao6[i:i+1] for i in range(0, 12, 1)]})
+    if len(data) < 1:
+        return jsonify({"error": "数据不足，无法继续抽取"}), 400
+    hongbao_winner = random.choice(data)
+    data = [item for item in data if item != hongbao_winner]
+    return jsonify({'hongbao6': [hongbao_winner]})
 
-
-# 20抽1
+# 红包7：每次抽取1个，共20轮
 @app.route('/hongbao7', methods=['POST'])
 def hongbao7():
     global data
-    hongbao7 = random.sample(data, 20)
-    data = [item for item in data if item not in hongbao7]
-    return jsonify({'hongbao7': [hongbao7[i:i+1] for i in range(0, 20, 1)]})
+    if len(data) < 1:
+        return jsonify({"error": "数据不足，无法继续抽取"}), 400
+    hongbao_winner = random.choice(data)
+    data = [item for item in data if item != hongbao_winner]
+    return jsonify({'hongbao7': [hongbao_winner]})
 
 if __name__ == '__main__':
     app.run(debug=True)
