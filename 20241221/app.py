@@ -40,7 +40,7 @@ def draw_perfect():
     data = [item for item in data if item['桌号'] not in [table for pair in perfect_tables for table in pair]]
     return jsonify({'perfect_tables': perfect_tables})
 
-
+# 吉祥奖
 @app.route('/draw_perfect_number', methods=['POST'])
 def draw_perfect_number():
     global data
@@ -116,6 +116,7 @@ def hongbao1():
     hongbao_winners = random.sample(data, 5)
     data = [item for item in data if item not in hongbao_winners]
     return jsonify({'hongbao1': hongbao_winners})
+
 @app.route('/hongbao2', methods=['POST'])
 def hongbao2():
     global data

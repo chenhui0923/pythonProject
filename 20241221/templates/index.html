@@ -90,7 +90,7 @@
         <div class="result" id="perfect-number-result"></div>
 
         <!--  抽红包2-->
-        <button id="hongbao2" class="hidden" onclick="drawhongbao2()">抽取吉祥奖红包</button>
+        <button id="hongbao2-btn" class="hidden" onclick="drawhongbao2()">抽取吉祥奖红包</button>
         <div class="result" id="hongbao2-result"></div>
 
         <!-- 安康奖 -->
@@ -98,7 +98,7 @@
         <div class="result" id="healthy-result"></div>
 
         <!--  抽红包3-->
-        <button id="hongbao3" class="hidden" onclick="drawhongbao3()">抽取安康奖红包</button>
+        <button id="hongbao3-btn" class="hidden" onclick="drawhongbao3()">抽取安康奖红包</button>
         <div class="result" id="hongbao3-result"></div>
 
         <!-- 幸福奖 -->
@@ -106,7 +106,7 @@
         <div class="result" id="happy-result"></div>
 
         <!--  抽红包4-->
-        <button id="hongbao4" class="hidden" onclick="drawhongbao4()">抽取幸福奖红包</button>
+        <button id="hongbao4-btn" class="hidden" onclick="drawhongbao4()">抽取幸福奖红包</button>
         <div class="result" id="hongbao4-result"></div>
 
         <!-- 喜悦奖 -->
@@ -114,7 +114,7 @@
         <div class="result" id="joy-result"></div>
 
         <!--  抽红包5-->
-        <button id="hongbao5" class="hidden" onclick="drawhongbao5()">抽取喜悦奖红包</button>
+        <button id="hongbao5-btn" class="hidden" onclick="drawhongbao5()">抽取喜悦奖红包</button>
         <div class="result" id="hongbao5-result"></div>
 
         <!-- 一等奖 -->
@@ -122,7 +122,7 @@
         <div class="result" id="first-result"></div>
 
         <!--  抽红包6-->
-        <button id="hongbao6" class="hidden" onclick="drawhongbao6()">抽取一等奖红包</button>
+        <button id="hongbao6-btn" class="hidden" onclick="drawhongbao6()">抽取一等奖红包</button>
         <div class="result" id="hongbao6-result"></div>
 
         <!-- 特等奖 -->
@@ -130,7 +130,7 @@
         <div class="result" id="special-result"></div>
 
         <!--  抽红包7-->
-        <button id="hongbao7" class="hidden" onclick="drawhongbao7()">抽取特等奖红包</button>
+        <button id="hongbao7-btn" class="hidden" onclick="drawhongbao7()">抽取特等奖红包</button>
         <div class="result" id="hongbao7-result"></div>
     </div>
 
@@ -210,6 +210,7 @@
         let perfectNumberRound = 0;
         // 吉祥奖
        function drawPerfectNumber() {
+           document.getElementById('hongbao1-result').innerText = '';
             // 检查是否已经抽取了7轮
             if (perfectNumberRound >= 7) {
                 alert("已经抽取了7轮，无法继续抽取！");
@@ -230,99 +231,221 @@
                     // 如果抽取了7轮，隐藏按钮
                     if (perfectNumberRound === 7) {
                         hideButton('perfect-number-btn');
-                        showButton('healthy-btn');
+                        showButton('hongbao2-btn');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
                 });
         }
+        //红包2
+        let hongbao2Round = 0;
+        function drawhongbao2(){
+            document.getElementById('perfect-number-result').innerText = '';
+            if (hongbao2Round < 5) {
+                fetch('/hongbao2', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('hongbao2-result').innerHTML +=
+                            `第${hongbao2Round + 1}轮吉祥奖红包: <span>${data.hongbao2.map(w => `${w.桌号}-${w.序号}-${w.姓名}`).join(', ')}</span><br>`;
+                        hongbao2Round++;
+                        if (hongbao2Round === 5) {
+                            // 隐藏圆满奖按钮，显示吉祥奖按钮
+                            hideButton('hongbao2-btn');
+                            showButton('healthy-btn');
+                        }
+                    });
+            }
+
+        }
 
         // 安康奖
         let healthyRound = 0;
 
         function drawHealthy() {
-            document.getElementById('perfect-number-result').innerText = '';
+            document.getElementById('hongbao2-result').innerText = '';
             if (healthyRound < 4) {
                 fetch('/draw_healthy', { method: 'POST' })
                     .then(response => response.json())
                     .then(data => {
-                        document.getElementById('healthy-result').innerHTML += `安康奖: <span>${data.healthy_winners[healthyRound].map(w => `${w.桌号}-${w.序号}-${w.姓名}`).join(', ')}</span><br>`;
+                        document.getElementById('healthy-result').innerHTML += `安康奖: <span>${data.healthy_winners.map(w => `${w.桌号}-${w.序号}-${w.姓名}`).join(', ')}</span><br>`;
                         healthyRound++;
                         if (healthyRound === 4) {
                             hideButton('healthy-btn');
+                            showButton('hongbao3-btn');
+                        }
+                    });
+            }
+        }
+
+        //红包3
+        let hongbao3Round = 0;
+        function drawhongbao3(){
+            document.getElementById('healthy-result').innerText = '';
+            if (hongbao3Round < 2) {
+                fetch('/hongbao3', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('hongbao3-result').innerHTML +=
+                            `第${hongbao3Round + 1}轮安康奖红包: <span>${data.hongbao3.map(w => `${w.桌号}-${w.序号}-${w.姓名}`).join(', ')}</span><br>`;
+                        hongbao3Round++;
+                        if (hongbao3Round === 2) {
+                            // 隐藏圆满奖按钮，显示吉祥奖按钮
+                            hideButton('hongbao3-btn');
                             showButton('happy-btn');
                         }
                     });
             }
+
         }
 
         // 幸福奖
         let happyRound = 0;
 
         function drawHappy() {
-            document.getElementById('healthy-result').innerText = '';
+            document.getElementById('hongbao3-result').innerText = '';
             if (happyRound < 5) {
                 fetch('/draw_happy', { method: 'POST' })
                     .then(response => response.json())
                     .then(data => {
-                        document.getElementById('happy-result').innerHTML += `幸福奖: <span>${data.happy_winners[happyRound].map(w => `${w.桌号}-${w.序号}-${w.姓名}`).join(', ')}</span><br>`;
+                        document.getElementById('happy-result').innerHTML += `幸福奖: <span>${data.happy_winners.map(w => `${w.桌号}-${w.序号}-${w.姓名}`).join(', ')}</span><br>`;
                         happyRound++;
                         if (happyRound === 5) {
                             hideButton('happy-btn');
+                            showButton('hongbao4-btn');
+                        }
+                    });
+            }
+        }
+
+        //红包4
+        let hongbao4Round = 0;
+        function drawhongbao4(){
+            document.getElementById('happy-result').innerText = '';
+            if (hongbao4Round < 6) {
+                fetch('/hongbao4', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('hongbao4-result').innerHTML +=
+                            `第${hongbao4Round + 1}轮幸福奖红包: <span>${data.hongbao4.map(w => `${w.桌号}-${w.序号}-${w.姓名}`).join(', ')}</span><br>`;
+                        hongbao4Round++;
+                        if (hongbao4Round === 6) {
+                            // 隐藏圆满奖按钮，显示吉祥奖按钮
+                            hideButton('hongbao4-btn');
                             showButton('joy-btn');
                         }
                     });
             }
+
         }
 
         // 喜悦奖
         let joyRound = 0;
 
         function drawJoy() {
-            document.getElementById('happy-result').innerText = '';
+            document.getElementById('hongbao4-result').innerText = '';
             if (joyRound < 5) {
                 fetch('/draw_joy', { method: 'POST' })
                     .then(response => response.json())
                     .then(data => {
-                        document.getElementById('joy-result').innerHTML += `喜悦奖: <span>${data.joy_winners[joyRound].map(w => `${w.桌号}-${w.序号}-${w.姓名}`).join(', ')}</span><br>`;
+                        document.getElementById('joy-result').innerHTML += `喜悦奖: <span>${data.joy_winners.map(w => `${w.桌号}-${w.序号}-${w.姓名}`).join(', ')}</span><br>`;
                         joyRound++;
                         if (joyRound === 5) {
                             hideButton('joy-btn');
+                            showButton('hongbao5-btn');
+                        }
+                    });
+            }
+        }
+        //红包5
+        let hongbao5Round = 0;
+        function drawhongbao5(){
+            document.getElementById('joy-result').innerText = '';
+            if (hongbao5Round < 10) {
+                fetch('/hongbao5', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('hongbao5-result').innerHTML +=
+                            `第${hongbao5Round + 1}轮喜悦奖红包: <span>${data.hongbao5.map(w => `${w.桌号}-${w.序号}-${w.姓名}`).join(', ')}</span><br>`;
+                        hongbao5Round++;
+                        if (hongbao5Round === 10) {
+                            // 隐藏圆满奖按钮，显示吉祥奖按钮
+                            hideButton('hongbao5-btn');
                             showButton('first-btn');
                         }
                     });
             }
+
         }
 
         // 一等奖
         let firstRound = 0;
 
         function drawFirst() {
-            document.getElementById('joy-result').innerText = '';
+            document.getElementById('hongbao5-result').innerText = '';
             if (firstRound < 3) {
                 fetch('/draw_first', { method: 'POST' })
                     .then(response => response.json())
                     .then(data => {
-                        document.getElementById('first-result').innerHTML += `一等奖: <span>${data.first_winners[firstRound].map(w => `${w.桌号}-${w.序号}-${w.姓名}`).join(', ')}</span><br>`;
+                        document.getElementById('first-result').innerHTML += `一等奖: <span>${data.first_winners.map(w => `${w.桌号}-${w.序号}-${w.姓名}`).join(', ')}</span><br>`;
                         firstRound++;
                         if (firstRound === 3) {
                             hideButton('first-btn');
-                            showButton('special-btn');
+                            showButton('hongbao6-btn');
                         }
                     });
             }
         }
+        //红包6
+        let hongbao6Round = 0;
+        function drawhongbao6(){
+            document.getElementById('first-result').innerText = '';
+            if (hongbao6Round < 12) {
+                fetch('/hongbao6', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('hongbao6-result').innerHTML +=
+                            `第${hongbao6Round + 1}轮一等奖红包: <span>${data.hongbao6.map(w => `${w.桌号}-${w.序号}-${w.姓名}`).join(', ')}</span>`;
+                        hongbao6Round++;
+                        if (hongbao6Round === 12) {
+                            // 隐藏圆满奖按钮，显示吉祥奖按钮
+                            hideButton('hongbao6-btn');
+                            showButton('special-btn');
+                        }
+                    });
+            }
+
+        }
 
         // 特等奖
         function drawSpecial() {
-            document.getElementById('first-result').innerText = '';
+            document.getElementById('hongbao6-result').innerText = '';
             fetch('/draw_special', { method: 'POST' })
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('special-result').innerHTML = `特等奖: <span>${data.special_winner.桌号}-${data.special_winner.序号}-${data.special_winner.姓名}</span>`;
                     hideButton('special-btn');
+                    showButton('hongbao7-btn');
                 });
+        }
+        //红包7
+        let hongbao7Round = 0;
+        function drawhongbao7(){
+            document.getElementById('special-result').innerText = '';
+            if (hongbao7Round < 20) {
+                fetch('/hongbao7', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('hongbao7-result').innerHTML +=
+                            `第${hongbao7Round + 1}轮特等奖红包: <span>${data.hongbao7.map(w => `${w.桌号}-${w.序号}-${w.姓名}`).join(', ')}</span>`;
+                        hongbao7Round++;
+                        if (hongbao7Round === 20) {
+                            // 隐藏圆满奖按钮，显示吉祥奖按钮
+                            hideButton('hongbao7-btn');
+                        }
+                    });
+            }
+
         }
     </script>
 </body>
